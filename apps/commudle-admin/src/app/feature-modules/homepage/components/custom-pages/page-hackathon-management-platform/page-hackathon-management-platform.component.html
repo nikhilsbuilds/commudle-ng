@@ -1,53 +1,134 @@
 <!-- Hackathon Management Platform Page -->
 <div class="com-min-h-screen com-bg-white">
-  <!-- Skip to main content link for keyboard navigation -->
   <!-- Hero Section -->
-  <section id="main-content" class="hero-section" tabindex="-1">
-    <!-- Decorative Elements -->
-    <div class="hero-decoration code-block-1"></div>
-    <div class="hero-decoration code-block-2"></div>
-    <div class="hero-decoration code-block-3"></div>
+  <section
+    id="main-content"
+    class="hero-section"
+    [class.light-theme]="!isDarkMode"
+    [class.dark-theme]="isDarkMode"
+    tabindex="-1"
+  >
+    <!-- PixelBlast Background -->
+    <div class="pixel-blast-container">
+      <commudle-pixel-blast
+        variant="square"
+        [pixelSize]="4"
+        color="#3b82f6"
+        [patternScale]="2"
+        [patternDensity]="1"
+        [pixelSizeJitter]="0"
+        [enableRipples]="true"
+        [rippleSpeed]="0.4"
+        [rippleThickness]="0.12"
+        [rippleIntensityScale]="1.5"
+        [liquid]="false"
+        [speed]="0.5"
+        [edgeFade]="0.25"
+        [transparent]="true"
+      />
+    </div>
 
-    <div class="com-max-w-7xl com-mx-auto com-px-4 com-py-20">
-      <div class="com-flex com-w-full md:com-flex-row com-flex-col-reverse com-gap-12 com-items-center">
-        <!-- Left Content -->
-        <div class="hero-content">
-          <div class="hero-badge">
-            <fa-icon [icon]="faRocket" class="com-mr-2"></fa-icon>
-            Trusted by top developer communities worldwide
-          </div>
-          <h1 class="hero-title">
-            Reach developers ready to build
-            <span>with Hackathon Platform</span>
-          </h1>
-          <p class="hero-description"></p>
-          <div class="hero-cta">
-            <a [routerLink]="['/pricing']">
-              <button nbButton status="danger" size="large" class="cta-primary">
-                <fa-icon [icon]="faRocket" class="com-mr-2"></fa-icon>
-                Host a Hackathon
-              </button>
-            </a>
-          </div>
-          <div class="hero-stats">
-            <div class="stat-item">
-              <span class="stat-number">250,000+</span>
-              <span class="stat-label">Developers & Designers</span>
-            </div>
-            <div class="stat-item">
-              <span class="stat-number">500,000+</span>
-              <span class="stat-label">Community Members</span>
-            </div>
-            <div class="stat-item">
-              <span class="stat-number">100%</span>
-              <span class="stat-label">Focus on Developer Communities</span>
-            </div>
-          </div>
+    <!-- Center mask for text readability -->
+    <div class="center-mask"></div>
+
+    <!-- Content -->
+    <div class="content-wrapper">
+      <!-- Trust badge -->
+      <div class="badge-container">
+        <span class="trust-badge">
+          <span class="badge-dot"></span>
+          Trusted by 10000+ hackathon organizers
+        </span>
+      </div>
+
+      <!-- Main content -->
+      <div class="text-center">
+        <h1 class="main-headline">Goodbye to Chaos!</h1>
+
+        <div class="flip-text-container">
+          <commudle-layout-text-flip
+            text="One Dashboard to"
+            [words]="flipWords"
+            suffix="Hackathons"
+            [duration]="2500"
+            [theme]="isDarkMode ? 'dark' : 'light'"
+          />
         </div>
 
-        <!-- Right Hero Image -->
-        <div class="hero-image">
-          <img [src]="hackathonImages.hero_image" />
+        <p class="subtitle">
+          Stop juggling spreadsheets, emails, and tools. Manage your entire hackathon from one place.
+        </p>
+
+        <!-- CTA Button -->
+        <div class="hero-cta-container">
+          <a [routerLink]="['/pricing']">
+            <div class="button-wrapper">
+              <!-- Animated glossy border -->
+              <div class="glossy-border glossy-hover"></div>
+              <div class="glossy-border glossy-base"></div>
+
+              <!-- Inner background -->
+              <div class="button-bg"></div>
+
+              <button class="hero-cta-button">
+                Host a Hackathon
+                <span class="arrow-circle">
+                  <svg
+                    class="arrow-icon arrow-exit"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                  <svg
+                    class="arrow-icon arrow-enter"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Feature pills -->
+      <div class="hero-features-container">
+        <div *ngFor="let feature of features" class="feature-pill">
+          <svg
+            class="check-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+            <path d="m9 11 3 3L22 4" />
+          </svg>
+          {{ feature }}
         </div>
       </div>
     </div>

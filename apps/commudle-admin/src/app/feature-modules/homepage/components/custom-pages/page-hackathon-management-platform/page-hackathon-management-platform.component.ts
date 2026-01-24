@@ -1,8 +1,9 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Subject } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { SeoService } from '@commudle/shared-services';
 import { FooterService } from 'apps/commudle-admin/src/app/services/footer.service';
+import { DarkModeService } from 'apps/commudle-admin/src/app/services/dark-mode.service';
 import { SharedComponentsModule } from 'apps/shared-components/shared-components.module';
 import { IFaq } from '@commudle/shared-models';
 import { NbButtonModule } from '@commudle/theme';
@@ -37,22 +38,38 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { staticAssets } from 'apps/commudle-admin/src/assets/static-assets';
 import { RouterModule } from '@angular/router';
+import { PixelBlastComponent } from './components/pixel-blast/pixel-blast.component';
+import { LayoutTextFlipComponent } from './components/layout-text-flip/layout-text-flip.component';
 
 @Component({
   selector: 'commudle-page-hackathon-management-platform',
   standalone: true,
-  imports: [CommonModule, SharedComponentsModule, NbButtonModule, FontAwesomeModule, RouterModule],
+  imports: [
+    CommonModule,
+    SharedComponentsModule,
+    NbButtonModule,
+    FontAwesomeModule,
+    RouterModule,
+    PixelBlastComponent,
+    LayoutTextFlipComponent,
+  ],
   templateUrl: './page-hackathon-management-platform.component.html',
   styleUrls: ['./page-hackathon-management-platform.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageHackathonManagementPlatformComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
-  private intersectionObserver?: IntersectionObserver;
 
-  @ViewChild('heroSection', { static: false }) heroSection?: ElementRef;
-
-  // Image sources with WebP support and responsive sizing
+  // Hero section data
+  flipWords = ['Organize', 'Manage', 'Host'];
+  features = [
+    'Custom Registration Forms',
+    'Team Formation Tool',
+    'Multi-round Judging',
+    'Automated Emails',
+    'Project Gallery',
+    'Scorecards & Certificates',
+  ];
 
   // FontAwesome icons
   faRocket = faRocket;
@@ -85,15 +102,31 @@ export class PageHackathonManagementPlatformComponent implements OnInit, OnDestr
 
   hackathonImages = staticAssets.hackathon_platform;
 
+  // Theme
+  isDarkMode = false;
+
   // FAQ data
   faqs: IFaq[] = [];
 
-  constructor(private seoService: SeoService, private footerService: FooterService) {}
+  constructor(
+    private seoService: SeoService,
+    private footerService: FooterService,
+    private darkModeService: DarkModeService,
+    private cdr: ChangeDetectorRef,
+  ) {}
 
   ngOnInit(): void {
     this.setPageMeta();
     this.footerService.changeFooterStatus(true);
     this.setFaq();
+    this.subscribeToTheme();
+  }
+
+  private subscribeToTheme(): void {
+    this.darkModeService.isDarkMode$.pipe(takeUntil(this.destroy$)).subscribe((isDarkMode) => {
+      this.isDarkMode = isDarkMode;
+      this.cdr.markForCheck();
+    });
   }
 
   private setFaq(): void {
@@ -176,10 +209,5 @@ export class PageHackathonManagementPlatformComponent implements OnInit, OnDestr
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-
-    // Clean up intersection observer
-    if (this.intersectionObserver) {
-      this.intersectionObserver.disconnect();
-    }
   }
 }
